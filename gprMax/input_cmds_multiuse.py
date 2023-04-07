@@ -587,10 +587,10 @@ def process_multicmds(multicmds, G):
 
             # Create a new instance of the Material class material (start index after pec & free_space)
             m = Material(len(G.materials), tmp[4])
-            m.er = float(tmp[0])
-            m.se = se
-            m.mr = float(tmp[2])
-            m.sm = float(tmp[3])
+            m.er = float(tmp[0])   #介电常数
+            m.se = se               #电导率
+            m.mr = float(tmp[2])        #磁导率
+            m.sm = float(tmp[3])        #磁损耗
 
             # Set material averaging to False if infinite conductivity, i.e. pec
             if m.se == float('inf'):
