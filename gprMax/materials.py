@@ -68,6 +68,7 @@ class Material(object):
 
     def calculate_update_coeffsH(self, G):
         """Calculates the magnetic update coefficients of the material.
+        该函数用于计算材料的磁更新系数。磁更新系数是在有限差分时域（FDTD）方法中用于更新磁场的系数。它们取决于材料的磁性质和模拟中使用的网格参数。
 
         Args:
             G (class): Grid class instance - holds essential parameters describing the model.
@@ -83,7 +84,7 @@ class Material(object):
 
     def calculate_update_coeffsE(self, G):
         """Calculates the electric update coefficients of the material.
-
+        该函数用于计算材料的电更新系数。电更新系数是在有限差分时域（FDTD）方法中用于更新电场的系数。它们取决于材料的电性质和模拟中使用的网格参数。
         Args:
             G (class): Grid class instance - holds essential parameters
                     describing the model.
@@ -145,7 +146,8 @@ class Material(object):
     def calculate_er(self, freq):
         """
         Calculates the complex relative permittivity of the material at a specific frequency.
-
+        该函数用于计算材料在特定频率下的复相对介电常数。复相对介电常数是一种描述材料在电磁波作用下电性质的参数，
+        它取决于材料的组成和电磁波的频率。复相对介电常数包括实部和虚部，实部描述了材料对电场的响应，虚部描述了材料对电磁波能量的吸收。
         Args:
             freq (float): Frequency used to calculate complex relative permittivity.
 
