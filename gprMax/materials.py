@@ -156,8 +156,11 @@ class Material(object):
         """
 
         # Permittivity at infinite frequency if the material is dispersive
+        #在无限频率下的介电常数是指材料在极高频率下的介电常数。
         er = self.er
 
+        
+        #在debye、lorentz、drude就需要考虑复介电常数
         if self.poles > 0:
             w = 2 * np.pi * freq
             er += self.se / (1j * w * e0)
