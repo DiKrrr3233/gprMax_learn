@@ -52,7 +52,7 @@ def process_multicmds(multicmds, G):
         G (class): Grid class instance - holds essential parameters describing the model.
     """
 
-    # Check if coordinates are within the bounds of the grid
+    # Check if coordinates are within the bounds of the grid  用于检查坐标是否在模型域内。
     def check_coordinates(x, y, z, name=''):
         try:
             G.within_bounds(x=x, y=y, z=z)
@@ -60,7 +60,7 @@ def process_multicmds(multicmds, G):
             s = "'{}: {} ' {} {}-coordinate is not within the model domain".format(cmdname, ' '.join(tmp), name, err.args[0])
             raise CmdInputError(s)
 
-    # Waveform definitions
+    # Waveform definitions  检验波形
     cmdname = '#waveform'
     if multicmds[cmdname] is not None:
         for cmdinstance in multicmds[cmdname]:
@@ -91,7 +91,7 @@ def process_multicmds(multicmds, G):
         for cmdinstance in multicmds[cmdname]:
             tmp = cmdinstance.split()
             if len(tmp) < 6:
-                raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires at least six parameters')
+                raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires at least six parameters')   #检查了电压源命令实例的内容是否正确
 
             # Check polarity & position parameters
             polarisation = tmp[0].lower()
