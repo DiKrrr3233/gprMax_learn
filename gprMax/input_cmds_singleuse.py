@@ -216,7 +216,7 @@ def process_singlecmds(singlecmds, G):
     if singlecmds[cmd] is not None:
         tmp = singlecmds[cmd].split()
         if len(tmp) != 1 and len(tmp) != 6:
-            raise CmdInputError(cmd + ' requires either one or six parameter(s)')
+            raise CmdInputError(cmd + ' requires either one or six parameter(s)')    #检查 tmp 列表的长度是否为1或6。如果不是，则引发 CmdInputError 异常。这是因为 #pml_cells 命令需要1个或6个参数。如果只有一个参数，则所有 PML 层的厚度都将设置为相同的值。如果有6个参数，则可以分别指定每个 PML 层的厚度。
         if len(tmp) == 1:
             for key in G.pmlthickness.keys():
                 G.pmlthickness[key] = int(tmp[0])
