@@ -298,17 +298,24 @@ def process_singlecmds(singlecmds, G):
 
         # Read all waveform values into an array
         waveformvalues = np.loadtxt(excitationfile, skiprows=1, dtype=floattype)
+        #使用 np.loadtxt 函数从 excitationfile 文件中读取波形值，并将它们存储在名为 waveformvalues 的数组中。
+        #skiprows=1 参数表示跳过文件的第一行，因为它包含波形名称而不是波形值。dtype=floattype 参数指定了数组中元素的数据类型。
 
         # Time array (if specified) for interpolation, otherwise use simulation time
+        #这段代码检查波形名称列表 waveformIDs 的第一个元素是否为 time。如果是，则表示用户在激励文件中指定了时间数组。
+        #在这种情况下，代码将 waveformIDs 列表中的第一个元素删除，并从 waveformvalues 数组中提取时间数组。
+        #否则，它使用 np.arange 函数创建一个模拟时间数组。最后，它设置 timestr 变量，以指示使用的时间数组类型。
+    
         if waveformIDs[0].lower() == 'time':
             waveformIDs = waveformIDs[1:]
             waveformtime = waveformvalues[:, 0]
             waveformvalues = waveformvalues[:, 1:]
             timestr = 'user-defined time array'
         else:
-            waveformtime = np.arange(0, G.timewindow + G.dt, G.dt)
+            waveformtime = np.arange(0, G.timewindow + G.dt, G.dt)  
+            #使用 np.arange 函数创建一个模拟时间数组。它从0开始，以 G.dt 为步长，直到 G.timewindow + G.dt。这个数组用于在没有用户定义时间数组的情况下插值波形值。
             timestr = 'simulation time array'
-
+        #检测自定义的波形名字是不是与内置波形重复
         for waveform in range(len(waveformIDs)):
             if any(x.ID == waveformIDs[waveform] for x in G.waveforms):
                 raise CmdInputError('Waveform with ID {} already exists'.format(waveformIDs[waveform]))
@@ -318,7 +325,12 @@ def process_singlecmds(singlecmds, G):
 
             # Select correct column of waveform values depending on array shape
             singlewaveformvalues = waveformvalues[:] if len(waveformvalues.shape) == 1 else waveformvalues[:, waveform]
-
+            #根据 waveformvalues 数组的形状选择正确的波形值。如果 waveformvalues 数组只有一维，则将其全部内容复制到 singlewaveformvalues 变量中。
+            #否则，它从 waveformvalues 数组中提取指定列的值，并将它们存储在 singlewaveformvalues 变量中。
+            
+            
+            #这段代码调整 singlewaveformvalues 数组的长度，使其与 waveformtime 数组的长度相同。如果 singlewaveformvalues 数组比 waveformtime 数组长，则将其截断。
+            #如果 singlewaveformvalues 数组比 waveformtime 数组短，则在其末尾添加零。这样做的目的是确保波形值数组与时间数组具有相同的长度，以便进行插值。
             # Truncate waveform array if it is longer than time array
             if len(singlewaveformvalues) > len(waveformtime):
                 singlewaveformvalues = singlewaveformvalues[:len(waveformtime)]
@@ -328,7 +340,9 @@ def process_singlecmds(singlecmds, G):
                 tmp[:len(singlewaveformvalues)] = singlewaveformvalues
                 singlewaveformvalues = tmp
 
-            # Interpolate waveform values
+            # Interpolate waveform values  对波形进行插值
+            #这行代码使用了 SciPy 库中的 interpolate.interp1d 函数，该函数用于对一维函数进行插值。在这个例子中，waveformtime 和 singlewaveformvalues 分别是用来
+            #近似某个函数 f 的 x 和 y 值数组，即 y = f(x)。这个类返回一个函数，其调用方法使用插值来找到新点的值。kwargs 是一个字典，它包含了传递给 interp1d 函数的可选参数。
             w.userfunc = interpolate.interp1d(waveformtime, singlewaveformvalues, **kwargs)
 
             if G.messages:
