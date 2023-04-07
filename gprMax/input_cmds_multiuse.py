@@ -93,7 +93,8 @@ def process_multicmds(multicmds, G):
             if len(tmp) < 6:
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires at least six parameters')   #检查了电压源命令实例的内容是否正确
 
-            # Check polarity & position parameters
+            # Check polarity & position parameters  检查了极性和位置参数。
+            # 在2D TMx模式下，极性必须为x。 其他同理。
             polarisation = tmp[0].lower()
             if polarisation not in ('x', 'y', 'z'):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' polarisation must be x, y, or z')
@@ -104,6 +105,9 @@ def process_multicmds(multicmds, G):
             elif '2D TMz' in G.mode and (polarisation == 'x' or polarisation == 'y'):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' polarisation must be z in 2D TMz mode')
 
+                
+            #计算了x，y和z坐标，并检查它们是否在网格的边界内。如果坐标不在网格的边界内，它将引发一个错误。
+            #此外，它还检查了电阻值是否大于或等于零。如果不是，它将引发一个错误。此外，如果坐标在PML内，它会打印一条警告消息，指出源和接收器通常不应该位于PML内。
             xcoord = G.calculate_coord('x', tmp[1])
             ycoord = G.calculate_coord('y', tmp[2])
             zcoord = G.calculate_coord('z', tmp[3])
@@ -115,10 +119,16 @@ def process_multicmds(multicmds, G):
             if resistance < 0:
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires a source resistance of zero or greater')
 
-            # Check if there is a waveformID in the waveforms list
+                
+                
+            # Check if there is a waveformID in the waveforms list  检查波形是否在内置波形列表内
             if not any(x.ID == tmp[5] for x in G.waveforms):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' there is no waveform with the identifier {}'.format(tmp[5]))
 
+                
+            #这段代码创建了一个电压源对象，并设置了它的极性、坐标、ID、电阻和波形ID。如果提供了超过6个参数，它还会检查源的开始时间和结束时间。
+            #如果开始时间小于零，它将引发一个错误。如果停止时间小于零，它也将引发一个错误。如果源的持续时间小于或等于零，它也将引发一个错误。
+            #然后，它设置了电压源的开始和停止时间。如果没有提供超过6个参数，电压源的开始时间将设置为0，停止时间将设置为G.timewindow。
             v = VoltageSource()
             v.polarisation = polarisation
             v.xcoord = xcoord
@@ -164,7 +174,7 @@ def process_multicmds(multicmds, G):
             if len(tmp) < 5:
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires at least five parameters')
 
-            # Check polarity & position parameters
+            # Check polarity & position parameters  检查了极性和位置参数。
             polarisation = tmp[0].lower()
             if polarisation not in ('x', 'y', 'z'):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' polarisation must be x, y, or z')
@@ -182,21 +192,27 @@ def process_multicmds(multicmds, G):
             if xcoord < G.pmlthickness['x0'] or xcoord > G.nx - G.pmlthickness['xmax'] or ycoord < G.pmlthickness['y0'] or ycoord > G.ny - G.pmlthickness['ymax'] or zcoord < G.pmlthickness['z0'] or zcoord > G.nz - G.pmlthickness['zmax']:
                 print(Fore.RED + "WARNING: '" + cmdname + ': ' + ' '.join(tmp) + "'" + ' sources and receivers should not normally be positioned within the PML.' + Style.RESET_ALL)
 
-            # Check if there is a waveformID in the waveforms list
+            # Check if there is a waveformID in the waveforms list   检查波形是否在内置波形列表内
             if not any(x.ID == tmp[4] for x in G.waveforms):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' there is no waveform with the identifier {}'.format(tmp[4]))
 
             h = HertzianDipole()
             h.polarisation = polarisation
 
-            # Set length of dipole to grid size in polarisation direction
+            # Set length of dipole to grid size in polarisation direction   设置偶极子的方向为极化方向
+            #根据极性设置了偶极子的长度。
+            #如果极性是x，偶极子的长度将设置为G.dx。
+            #如果极性是y，偶极子的长度将设置为G.dy。
+            #如果极性是z，偶极子的长度将设置为G.dz。
             if h.polarisation == 'x':
                 h.dl = G.dx
             elif h.polarisation == 'y':
                 h.dl = G.dy
             elif h.polarisation == 'z':
                 h.dl = G.dz
-
+            
+            
+            #定义偶极子源；并检查源的开始和结束时间
             h.xcoord = xcoord
             h.ycoord = ycoord
             h.zcoord = zcoord
@@ -237,7 +253,7 @@ def process_multicmds(multicmds, G):
 
             G.hertziandipoles.append(h)
 
-    # Magnetic dipole
+    # Magnetic dipole   磁极子源
     cmdname = '#magnetic_dipole'
     if multicmds[cmdname] is not None:
         for cmdinstance in multicmds[cmdname]:
@@ -245,7 +261,7 @@ def process_multicmds(multicmds, G):
             if len(tmp) < 5:
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' requires at least five parameters')
 
-            # Check polarity & position parameters
+            # Check polarity & position parameters   检查了极性和位置参数。
             polarisation = tmp[0].lower()
             if polarisation not in ('x', 'y', 'z'):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' polarisation must be x, y, or z')
@@ -263,10 +279,12 @@ def process_multicmds(multicmds, G):
             if xcoord < G.pmlthickness['x0'] or xcoord > G.nx - G.pmlthickness['xmax'] or ycoord < G.pmlthickness['y0'] or ycoord > G.ny - G.pmlthickness['ymax'] or zcoord < G.pmlthickness['z0'] or zcoord > G.nz - G.pmlthickness['zmax']:
                 print(Fore.RED + "WARNING: '" + cmdname + ': ' + ' '.join(tmp) + "'" + ' sources and receivers should not normally be positioned within the PML.' + Style.RESET_ALL)
 
-            # Check if there is a waveformID in the waveforms list
+            # Check if there is a waveformID in the waveforms list   检查波形是否在内置波形列表内
             if not any(x.ID == tmp[4] for x in G.waveforms):
                 raise CmdInputError("'" + cmdname + ': ' + ' '.join(tmp) + "'" + ' there is no waveform with the identifier {}'.format(tmp[4]))
-
+                
+                
+            #同电偶极子一样
             m = MagneticDipole()
             m.polarisation = polarisation
             m.xcoord = xcoord
