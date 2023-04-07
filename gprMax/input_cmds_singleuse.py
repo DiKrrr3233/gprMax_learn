@@ -191,16 +191,21 @@ def process_singlecmds(singlecmds, G):
     # If number of iterations given
     # The +/- 1 used in calculating the number of iterations is to account for
     # the fact that the solver (iterations) loop runs from 0 to < G.iterations
+    #时间长度部分如果给出的迭代次数；
+    #因为求解器（迭代）循环从0运行到 < G.iterations。这意味着，如果用户给出了迭代次数，那么在计算时间窗口时，需要减去1，以便正确计算迭代次数。(也就是python从0开始)
+    
     try:
         tmp = int(tmp)
         G.timewindow = (tmp - 1) * G.dt
         G.iterations = tmp
     # If real floating point value given
+    # 如果时间长度部分给的是时间长度
     except ValueError:
         tmp = float(tmp)
         if tmp > 0:
             G.timewindow = tmp
-            G.iterations = int(np.ceil(tmp / G.dt)) + 1
+            G.iterations = int(np.ceil(tmp / G.dt)) + 1      #使用 np.ceil 函数将 tmp / G.dt 的结果向上取整。np.ceil 函数返回大于或等于给定数字的最小整数。
+                                                             #在这种情况下，它用于计算时间窗口所需的迭代次数，确保迭代次数足够覆盖整个时间窗口。
         else:
             raise CmdInputError(cmd + ' must have a value greater than zero')
     if G.messages:
