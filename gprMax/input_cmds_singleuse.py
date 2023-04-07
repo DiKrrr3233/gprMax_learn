@@ -213,7 +213,7 @@ def process_singlecmds(singlecmds, G):
 
     # PML cells
     cmd = '#pml_cells'
-    if singlecmds[cmd] is not None:
+    if singlecmds[cmd] is not None:      #如果它的值不是 None，则表示该命令在模型定义中出现过，并且可以对其进行处理。如果它的值为 None，则表示该命令未在模型定义中出现，将跳过对该命令的处理。
         tmp = singlecmds[cmd].split()
         if len(tmp) != 1 and len(tmp) != 6:
             raise CmdInputError(cmd + ' requires either one or six parameter(s)')    #检查 tmp 列表的长度是否为1或6。如果不是，则引发 CmdInputError 异常。这是因为 #pml_cells 命令需要1个或6个参数。如果只有一个参数，则所有 PML 层的厚度都将设置为相同的值。如果有6个参数，则可以分别指定每个 PML 层的厚度。
@@ -221,16 +221,17 @@ def process_singlecmds(singlecmds, G):
             for key in G.pmlthickness.keys():
                 G.pmlthickness[key] = int(tmp[0])
         else:
-            G.pmlthickness['x0'] = int(tmp[0])
+            G.pmlthickness['x0'] = int(tmp[0])   #G.pmlthickness['x0'] 表示 x 方向最小端的 PML 层的厚度，而 G.pmlthickness['xmax'] 表示 x 方向最大端的 PML 层的厚度。
             G.pmlthickness['y0'] = int(tmp[1])
             G.pmlthickness['z0'] = int(tmp[2])
             G.pmlthickness['xmax'] = int(tmp[3])
             G.pmlthickness['ymax'] = int(tmp[4])
             G.pmlthickness['zmax'] = int(tmp[5])
     if 2 * G.pmlthickness['x0'] >= G.nx or 2 * G.pmlthickness['y0'] >= G.ny or 2 * G.pmlthickness['z0'] >= G.nz or 2 * G.pmlthickness['xmax'] >= G.nx or 2 * G.pmlthickness['ymax'] >= G.ny or 2 * G.pmlthickness['zmax'] >= G.nz:
-        raise CmdInputError(cmd + ' has too many cells for the domain size')
+        raise CmdInputError(cmd + ' has too many cells for the domain size')    #检查 PML 层的厚度是否超过了域的大小。如果 PML 层太厚，将会导致错误，并引发 CmdInputError 异常。
+                                                                                #PML 是一种吸收边界条件，用于模拟无限大的空间。它的厚度应该适当，以便在不影响模拟结果的同时减少计算量。
 
-    # PML formulation
+    # PML formulation    这部分涉及到自定义PML
     cmd = '#pml_formulation'
     if singlecmds[cmd] is not None:
         tmp = singlecmds[cmd].split()
