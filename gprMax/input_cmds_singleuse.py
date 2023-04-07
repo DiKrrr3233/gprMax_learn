@@ -242,7 +242,7 @@ def process_singlecmds(singlecmds, G):
         else:
             raise CmdInputError(cmd + ' PML formulation is not found')
 
-    # src_steps
+    # src_steps   定义发射器的步长
     cmd = '#src_steps'
     if singlecmds[cmd] is not None:
         tmp = singlecmds[cmd].split()
@@ -254,7 +254,7 @@ def process_singlecmds(singlecmds, G):
         if G.messages:
             print('Simple sources will step {:g}m, {:g}m, {:g}m for each model run.'.format(G.srcsteps[0] * G.dx, G.srcsteps[1] * G.dy, G.srcsteps[2] * G.dz))
 
-    # rx_steps
+    # rx_steps   定义接收器的步长
     cmd = '#rx_steps'
     if singlecmds[cmd] is not None:
         tmp = singlecmds[cmd].split()
@@ -266,7 +266,7 @@ def process_singlecmds(singlecmds, G):
         if G.messages:
             print('All receivers will step {:g}m, {:g}m, {:g}m for each model run.'.format(G.rxsteps[0] * G.dx, G.rxsteps[1] * G.dy, G.rxsteps[2] * G.dz))
 
-    # Excitation file for user-defined source waveforms
+    # Excitation file for user-defined source waveforms   
     cmd = '#excitation_file'
     if singlecmds[cmd] is not None:
         tmp = singlecmds[cmd].split()
@@ -274,16 +274,18 @@ def process_singlecmds(singlecmds, G):
             raise CmdInputError(cmd + ' requires either one or three parameter(s)')
         excitationfile = tmp[0]
 
-        # Optional parameters passed directly to scipy.interpolate.interp1d
+        # Optional parameters passed directly to scipy.interpolate.interp1d  
         kwargs = dict()
-        if len(tmp) > 1:
+        if len(tmp) > 1:                                                #如果#excitation_file指令中指定了scipy.interpolate.interp1d函数的选项值，则按指定方式进行插值
             kwargs['kind'] = tmp[1]
             kwargs['fill_value'] = tmp[2]
-        else:
+        else:                                                             # 否则，按照默认线性插值              
             args, varargs, keywords, defaults = inspect.getargspec(interpolate.interp1d)
             kwargs = dict(zip(reversed(args), reversed(defaults)))
 
-        # See if file exists at specified path and if not try input file directory
+        # See if file exists at specified path and if not try input file directory  
+        #检查 excitationfile 是否是一个有效的文件路径。
+        #如果不是，则使用 os.path.abspath 和 os.path.join 函数将其更改为 G.inputdirectory 目录下的绝对路径。这样做的目的是确保能够找到激励文件，即使它不在当前工作目录中。
         if not os.path.isfile(excitationfile):
             excitationfile = os.path.abspath(os.path.join(G.inputdirectory, excitationfile))
 
