@@ -22,6 +22,8 @@ from collections import namedtuple
 """This module contains functional forms of some of the most commonly used gprMax
 commands. It can be useful to use these within Python scripting in an input file.
 For convenience, x, y, z coordinates are lumped in a namedtuple Coordinate:
+
+为了方便，x、y、z 坐标被组合成一个名为 Coordinate 的命名元组。这个命名元组可以像普通元组一样访问，也可以通过属性名显式访问。
 >>> c = Coordinate(0.1, 0.2, 0.3)
 >>> c
 Coordinate(x=0.1, y=0.2, z=0.3)
