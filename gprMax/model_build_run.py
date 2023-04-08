@@ -97,13 +97,16 @@ def run_model(args, currentmodelrun, modelend, numbermodelruns, inputfile, usern
         tsolve (int): Length of time (seconds) of main FDTD calculations
     """
 
-    # Monitor memory usage
+    # Monitor memory usage  用于监控内存使用情况。
     p = psutil.Process()
 
-    # Declare variable to hold FDTDGrid class
+    # Declare variable to hold FDTDGrid class  
+    #声明了一个全局变量 G，用来保存 FDTDGrid 类的实例。FDTDGrid 类包含了描述模型的基本参数。在这个程序中，G 变量将在整个程序中使用，以便在不同函数之间共享 FDTDGrid 类的实例。
     global G
 
     # Used for naming geometry and output files
+    #用于确定几何和输出文件的命名。它定义了一个名为 appendmodelnumber 的变量，该变量用于在文件名中添加模型运行编号。
+    #如果模型运行次数为1且未指定任务或重新启动，则不会在文件名中添加模型运行编号。否则，将在文件名中添加当前模型运行编号。
     appendmodelnumber = '' if numbermodelruns == 1 and not args.task and not args.restart else str(currentmodelrun)
 
     # Normal model reading/building process; bypassed if geometry information to be reused
@@ -121,7 +124,11 @@ def run_model(args, currentmodelrun, modelend, numbermodelruns, inputfile, usern
             G.gpu = args.gpu
 
         G.inputfilename = os.path.split(inputfile.name)[1]
+        #用于获取输入文件的文件名。它使用 os.path 模块中的 split 函数将输入文件的路径分割为目录和文件名两部分。
+        #然后，它将文件名存储在 G.inputfilename 变量中，以便在程序的其他部分使用。
         G.inputdirectory = os.path.dirname(os.path.abspath(inputfile.name))
+        #获取输入文件所在的目录。它使用 os.path 模块中的 dirname 和 abspath 函数来获取输入文件的绝对路径，并从中提取目录名称。
+        #然后，它将目录名称存储在 G.inputdirectory 变量中，以便在程序的其他部分使用。
         inputfilestr = '\n--- Model {}/{}, input file: {}'.format(currentmodelrun, modelend, inputfile.name)
         if G.messages:
             print(Fore.GREEN + '{} {}\n'.format(inputfilestr, '-' * (get_terminal_width() - 1 - len(inputfilestr))) + Style.RESET_ALL)
