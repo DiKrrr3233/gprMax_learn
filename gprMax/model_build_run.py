@@ -83,7 +83,18 @@ from gprMax.yee_cell_build_ext import build_magnetic_components
 
 def run_model(args, currentmodelrun, modelend, numbermodelruns, inputfile, usernamespace):
     """Runs a model - processes the input file; builds the Yee cells; calculates update coefficients; runs main FDTD loop.
+    这段代码定义了一个名为 run_model 的函数，它接受六个参数：args、currentmodelrun、modelend、numbermodelruns、inputfile 和 usernamespace。
+    这个函数用于运行模型，处理输入文件，构建 Yee 单元格，计算更新系数，运行主 FDTD 循环。
 
+    args 是一个字典，包含命令行参数。
+    currentmodelrun 是一个整数，表示当前模型运行编号。
+    modelend 是一个整数，表示最后一个要运行的模型的编号。
+    numbermodelruns 是一个整数，表示模型运行的总次数。
+    inputfile 是一个文件对象，表示输入文件。
+    usernamespace 是一个字典，表示用户可以在输入文件中的任何 Python 代码块中访问的命名空间。
+    
+    该函数返回一个整数，表示主 FDTD 计算所需的时间（以秒为单位）。
+    
     Args:
         args (dict): Namespace with command line arguments
         currentmodelrun (int): Current model run number.
