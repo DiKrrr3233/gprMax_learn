@@ -30,7 +30,10 @@ def process_python_include_code(inputfile, usernamespace):
     lines that do not begin with a hash (#) after it has processed
     Python commands. It will also process any include file commands
     and insert the contents of the included file at that location.
-
+    
+    它会在输入文件中查找并处理任何Python代码。它会忽略任何以双井号（##）开头的注释行和空白行。
+    在处理完Python命令后，它还会忽略任何不以井号（#）开头的行。它还会处理任何包含文件命令，并将包含文件的内容插入到该位置。
+    
     Args:
         inputfile (object): File object for input file.
         usernamespace (dict): Namespace that can be accessed by user
@@ -111,7 +114,8 @@ def process_include_files(hashcmds, inputfile):
     """
     Looks for and processes any include file commands and insert
         the contents of the included file at that location.
-
+    它会查找并处理任何包含文件命令，并将包含文件的内容插入到该位置。
+    
     Args:
         hashcmds (list): Input commands.
         inputfile (object): File object for input file.
@@ -155,7 +159,8 @@ def write_processed_file(processedlines, appendmodelnumber, G):
     """
     Writes an input file after any Python code and include commands
     in the original input file have been processed.
-
+    它会在原始输入文件中的任何Python代码和包含命令被处理后写入一个输入文件。
+    
     Args:
         processedlines (list): Input commands after after processing any
             Python code and include commands.
@@ -176,7 +181,7 @@ def check_cmd_names(processedlines, checkessential=True):
     """
     Checks the validity of commands, i.e. are they gprMax commands,
         and that all essential commands are present.
-
+    它会检查命令的有效性，即它们是否是gprMax命令，并确保所有必要的命令都存在。
     Args:
         processedlines (list): Input commands after Python processing.
         checkessential (boolean): Perform check to see that all essential commands are present.
