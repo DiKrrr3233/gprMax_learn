@@ -18,7 +18,12 @@
 
 cimport numpy as np
 
+#这段文本定义了一个名为 define_fine_geometry 的函数。
+#它是一个用 Cython 编写的函数，用于定义精细几何。
+#该函数接受多个参数，包括网格大小（nx、ny 和 nz）、体积的范围（xs、xf、ys、yf、zs 和 zf）、
+#空间离散化（dx、dy 和 dz）和一些数组（ID、points、x_lines、x_materials、y_lines、y_materials、z_lines 和 z_materials）。
 
+在该函数中，首先定义了一些变量，如 i、j 和 k，用于循环遍历体积。然后，使用嵌套循环遍历体积中的每个点，并计算其坐标。接下来，如果点不在体积的边界上，则计算其与相邻点之间的连线，并将连线的信息存储在相应的数组中。
 cpdef void define_fine_geometry(
                     int nx,
                     int ny,
