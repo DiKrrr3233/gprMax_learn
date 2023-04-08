@@ -294,7 +294,16 @@ def dispersion_analysis(G):
     """
     Analysis of numerical dispersion (Taflove et al, 2005, p112) -
         worse case of maximum frequency and minimum wavelength
-
+    它接受一个名为 G 的网格类实例作为参数。该函数对数值色散进行分析，计算最大频率和最小波长的最坏情况。
+    它返回一个字典，其中包含来自色散分析的结果。
+    这些结果包括物理相速度误差（百分比）、网格采样密度、具有最大介电常数的材料、最大显著频率和错误消息。
+    这个函数在模拟中非常重要，因为它可以帮助确定模拟是否会产生物理波传播。
+    
+    （根据网页上的 dispersion_analysis(G) 函数，模拟是否会产生物理波传播取决于网格采样密度。
+    如果网格采样密度大于或等于最小波长的最小网格采样，则模拟将产生物理波传播。
+    这个函数通过计算最小波长和最大空间步长来确定网格采样密度，然后将其与 G.mingridsampling 进行比较。
+    如果网格采样密度大于或等于 G.mingridsampling，则模拟将产生物理波传播。）
+    
     Args:
         G (class): Grid class instance - holds essential parameters describing the model.
 
@@ -415,7 +424,10 @@ def dispersion_analysis(G):
 
 def get_other_directions(direction):
     """Return the two other directions from x, y, z given a single direction
-
+    它接受一个参数 direction，表示一个方向（x、y 或 z）。
+    该函数返回一个元组，其中包含除给定方向之外的另外两个方向。
+    例如，如果 direction 是 ‘x’，则函数将返回 (‘y’, ‘z’)。这个函数可以用来确定给定方向的垂直方向。
+    
     Args:
         direction (str): Component x, y or z
 
@@ -430,7 +442,9 @@ def get_other_directions(direction):
 
 def Ix(x, y, z, Hx, Hy, Hz, G):
     """Calculates the x-component of current at a grid position.
-
+    Ix 是一个函数，它接受七个参数：x、y 和 z 是网格中的位置坐标；Hx、Hy 和 Hz 是磁场值的 numpy 数组；G 是一个网格类实例，它包含描述模型的基本参数。
+    该函数计算网格位置处的电流的 x 分量。
+    如果 y 或 z 等于 0，则 Ix 等于 0。否则，它将根据磁场值和网格参数计算出来。
     Args:
         x, y, z (float): Coordinates of position in grid.
         Hx, Hy, Hz (memory view): numpy array of magnetic field values.
@@ -447,7 +461,9 @@ def Ix(x, y, z, Hx, Hy, Hz, G):
 
 def Iy(x, y, z, Hx, Hy, Hz, G):
     """Calculates the y-component of current at a grid position.
-
+    Ix 是一个函数，它接受七个参数：x、y 和 z 是网格中的位置坐标；Hx、Hy 和 Hz 是磁场值的 numpy 数组；G 是一个网格类实例，它包含描述模型的基本参数。
+    该函数计算网格位置处的电流的 y 分量。
+    如果 x 或 z 等于 0，则 Iy 等于 0。否则，它将根据磁场值和网格参数计算出来。
     Args:
         x, y, z (float): Coordinates of position in grid.
         Hx, Hy, Hz (memory view): numpy array of magnetic field values.
@@ -464,7 +480,9 @@ def Iy(x, y, z, Hx, Hy, Hz, G):
 
 def Iz(x, y, z, Hx, Hy, Hz, G):
     """Calculates the z-component of current at a grid position.
-
+    Ix 是一个函数，它接受七个参数：x、y 和 z 是网格中的位置坐标；Hx、Hy 和 Hz 是磁场值的 numpy 数组；G 是一个网格类实例，它包含描述模型的基本参数。
+    该函数计算网格位置处的电流的 z 分量。
+    如果 y 或 x 等于 0，则 Iz 等于 0。否则，它将根据磁场值和网格参数计算出来。
     Args:
         x, y, z (float): Coordinates of position in grid.
         Hx, Hy, Hz (memory view): numpy array of magnetic field values.
