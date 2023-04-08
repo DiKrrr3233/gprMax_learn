@@ -29,8 +29,12 @@ from gprMax.utilities import round_value
 
 
 class Source(object):
-    """Super-class which describes a generic source."""
-
+    """Super-class which describes a generic source.
+    第一个类是“Source”，它是一个超类，描述了一个通用的源。它有一些属性，如ID、极化、坐标和波形ID等。
+    它还有一个名为“calculate_waveform_values”的方法，该方法计算模拟期间源的所有波形值。
+    
+    """
+    
     def __init__(self):
         self.ID = None
         self.polarisation = None
@@ -72,7 +76,13 @@ class VoltageSource(Source):
     """A voltage source can be a hard source if it's resistance is zero, 
         i.e. the time variation of the specified electric field component is 
         prescribed. If it's resistance is non-zero it behaves as a resistive 
-        voltage source."""
+        voltage source.
+        它继承自“Source”类。这个类描述了一个电压源，如果它的电阻为零，则可以作为硬源，
+        即指定电场分量的时间变化被规定。如果它的电阻不为零，则表现为电阻电压源。它有一个名为“update_electric”的方法，用于更新电场值。
+        
+        (硬源:是一种电磁波源，它的电阻为零，这意味着指定的电场分量的时间变化被规定。在gprMax软件中，如果VoltageSource类的电阻为零，则它可以作为硬源。)
+        
+        """
 
     def __init__(self):
         super().__init__()
@@ -154,7 +164,11 @@ class VoltageSource(Source):
 
 
 class HertzianDipole(Source):
-    """A Hertzian dipole is an additive source (electric current density)."""
+    """A Hertzian dipole is an additive source (electric current density).
+    它继承自“Source”类。这个类描述了一个赫兹偶极子，它是一种附加源（电流密度）。
+    它有一个名为“update_electric”的方法，用于更新赫兹偶极子的电场值。
+    
+    """
 
     def __init__(self):
         super().__init__()
@@ -194,7 +208,10 @@ class HertzianDipole(Source):
 
 
 class MagneticDipole(Source):
-    """A magnetic dipole is an additive source (magnetic current density)."""
+    """A magnetic dipole is an additive source (magnetic current density).
+    它继承自“Source”类。这个类描述了一个磁偶极子，它是一种附加源（磁流密度）。它有一个名为“update_magnetic”的方法，用于更新磁偶极子的磁场值。
+    
+    """
 
     def __init__(self):
         super().__init__()
@@ -235,7 +252,11 @@ class MagneticDipole(Source):
 def gpu_initialise_src_arrays(sources, G):
     """Initialise arrays on GPU for source coordinates/polarisation, 
         other source information, and source waveform values.
-
+        
+    该函数名为“gpu_initialise_src_arrays”，它接受两个参数：sources和G。sources是一个源类的列表，例如HertzianDipoles。G是模型的实例。
+    该函数在GPU上初始化源坐标/极化、其他源信息和源波形值的数组。
+    它返回三个numpy数组：srcinfo1_gpu，srcinfo2_gpu和srcwaves_gpu，分别包含源单元格坐标和极化信息、其他源信息（例如长度、电阻等）和源波形值。
+    
     Args:
         sources (list): List of sources of one class, e.g. HertzianDipoles.
         G (class): Grid class instance - holds essential parameters describing the model.
@@ -287,6 +308,14 @@ class TransmissionLine(Source):
     """A transmission line source is a one-dimensional transmission
         line which is attached virtually to a grid cell. An example of this
         type of model can be found in: https://doi.org/10.1109/8.277228
+        
+        这个类描述了一个传输线源，它是一条一维传输线，虚拟地连接到网格单元。
+        它有一些属性，如电阻、ABC系数、传输线的空间步长、传输线中的单元格数等。
+        它还有一个名为“calculate_incident_V_I”的方法，该方法使用长长度传输线计算入射电压和电流。
+        
+        (ABC系数是吸收边界条件（Absorbing Boundary Condition）的缩写。
+        在gprMax软件中，TransmissionLine类中的ABC系数用于在传输线末端更新吸收边界条件。这些系数用于计算传输线末端的电压值，以减少反射。)
+        
     """
 
     def __init__(self, G):
