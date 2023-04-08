@@ -53,7 +53,8 @@ def process_geometrycmds(geometry, G):
     This function checks the validity of command parameters, creates instances
     of classes of parameters, and calls functions to directly set arrays
     solid, rigid and ID.
-
+    该函数检查命令参数的有效性，创建参数类的实例，并直接调用函数来设置数组solid，rigid和ID。
+    
     Args:
         geometry (list): Geometry commands in the model
     """
