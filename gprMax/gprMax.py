@@ -46,7 +46,15 @@ from gprMax.utilities import open_path_file
 from gprMax.utilities import timer
 
 def main():
-    """This is the main function for gprMax."""
+    """This is the main function for gprMax.
+    
+    它定义了一些命令行参数，用于控制gprMax的运行。
+    例如，‘-n’参数用于指定输入文件运行的次数，
+    ’-task’参数用于指定Open Grid Scheduler/Grid Engine上的任务标识符，
+    '-gpu’参数用于指定是否使用Nvidia GPU以及设备ID。
+    此外，还有一些其他参数，用于控制MPI任务、基准测试模式、几何模型生成等。
+    
+    """
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(prog='gprMax', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -84,7 +92,14 @@ def api(
     write_processed=False,
     opt_taguchi=False
 ):
-    """If installed as a module this is the entry point."""
+    """If installed as a module this is the entry point.
+    
+    这段文本定义了gprMax软件的API函数。当gprMax作为模块安装时，这是入口点。
+    该函数接受一些参数，例如inputfile（输入文件），n（运行输入文件的次数），task（Open Grid Scheduler/Grid Engine上的任务标识符），
+    gpu（是否使用Nvidia GPU以及设备ID）等。此外，还有一些其他参数，用于控制MPI任务、基准测试模式、几何模型生成等。
+    这些参数被存储在ImportArguments类的实例中，并传递给run_main函数。
+    
+    """
 
     class ImportArguments:
         pass
@@ -195,7 +210,12 @@ def run_std_sim(args, inputfile, usernamespace, optparams=None):
     """
     Run standard simulation - models are run one after another and each model
     is parallelised using either OpenMP (CPU) or CUDA (GPU)
-
+    
+    run_std_sim函数用于运行标准模拟。在标准模拟中，模型按顺序运行，每个模型都使用OpenMP（CPU）或CUDA（GPU）并行化。
+    该函数接受四个参数：args（命令行参数字典），inputfile（输入文件对象），usernamespace（用户可以在输入文件中的任何Python代码块中访问的命名空间），
+    optparams（可选参数，用于Taguchi优化，提供要优化的参数及其值）。
+    该函数根据这些参数设置模型运行的范围，并运行模型。
+    
     Args:
         args (dict): Namespace with command line arguments
         inputfile (object): File object for the input file.
@@ -240,6 +260,11 @@ def run_benchmark_sim(args, inputfile, usernamespace):
     Run standard simulation in benchmarking mode - models are run one
     after another and each model is parallelised using either OpenMP (CPU)
     or CUDA (GPU)
+    
+    run_benchmark_sim函数用于在基准测试模式下运行标准模拟。
+    在基准测试模式下，模型按顺序运行，每个模型都使用OpenMP（CPU）或CUDA（GPU）并行化。
+    该函数接受三个参数：args（命令行参数字典），inputfile（输入文件对象），usernamespace（用户可以在输入文件中的任何Python代码块中访问的命名空间）。
+    该函数根据这些参数设置模型运行的范围，并运行模型。它还收集有关CPU线程和时间以及GPU信息和时间的数据，并将其保存到NumPy存档中。
 
     Args:
         args (dict): Namespace with command line arguments
