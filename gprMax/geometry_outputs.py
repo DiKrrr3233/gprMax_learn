@@ -30,7 +30,12 @@ from gprMax.utilities import round_value
 
 
 class GeometryView(object):
-    """Views of the geometry of the model."""
+    """Views of the geometry of the model.
+    
+    GeometryView 类的目的是查看模型的几何形状。
+    它允许用户定义一个几何视图，指定体积的范围、空间离散化和文件名等参数。
+    然后，该类可以将几何信息写入 VTK 文件，以便在可视化软件中查看。
+    """
 
     if sys.byteorder == 'little':
         byteorder = 'LittleEndian'
@@ -313,7 +318,22 @@ class GeometryView(object):
 
 
 class GeometryObjects(object):
-    """Geometry objects to be written to file."""
+    """Geometry objects to be written to file.
+    定义了一个名为 GeometryObjects 的类。这个类用于将几何对象写入文件。
+    它有一个 __init__ 方法，用于初始化类的实例。
+    该方法接受多个参数，包括体积的范围（xs、xf、ys、yf、zs 和 zf）和基本文件名。
+    此外，该类还定义了一些属性，如 solidsize 和 rigidsize，用于计算要写入的数组的大小。
+    
+    GeometryObjects 类的目的是将几何对象写入文件。
+    它允许用户定义一个几何对象，指定体积的范围和基本文件名等参数。
+    然后，该类可以将几何对象信息写入 HDF5 格式的文件，以便在其他程序中使用。
+    
+    该类还有一个名为 write_hdf5 的方法，用于将几何对象信息写入 HDF5 格式的文件。
+    该方法接受两个参数：一个是 Grid 类的实例，它包含描述模型的必要参数；另一个是进度条类的实例。
+    在该方法中，首先创建一个 HDF5 文件，并设置一些属性，如 gprMax 版本、标题和空间离散化。
+    然后，获取几何对象体积中材料的最小和最大整数，并将几何对象信息写入 HDF5 文件。
+    
+    """
 
     def __init__(self, xs=None, ys=None, zs=None, xf=None, yf=None, zf=None, basefilename=None):
         """
