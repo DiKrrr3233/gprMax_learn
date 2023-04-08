@@ -37,7 +37,12 @@ from gprMax.utilities import round_value
 
 
 class Grid(object):
-    """Generic grid/mesh."""
+    """Generic grid/mesh.
+    它是一个通用的网格/网格类。它有一些属性，
+    如nx、ny、nz、dx、dy和dz等，分别表示网格的大小和空间步长。
+    它还有一些方法，如n_edges、n_nodes、n_cells和get等，分别用于计算网格的边数 、节点数 、单元格数 和 获取 网格中指定位置的值。
+    
+    """
 
     def __init__(self, grid):
         self.nx = grid.shape[0]
@@ -81,6 +86,19 @@ class FDTDGrid(Grid):
     """
     Holds attributes associated with the entire grid. A convenient
     way for accessing regularly used parameters.
+    
+    它继承自“Grid”类。它包含与整个网格相关的属性，是访问常用参数的一种方便方式。
+    它有一些属性，如inputfilename、inputdirectory、outputdirectory、title、messages等。
+    它还有一些与主机信息、CPU和GPU相关的属性，如hostinfo、nthreads、tpb和gpu等。
+    此外，它还有一些与模拟相关的属性，如highestfreqthres、maxnumericaldisp和mingridsampling等。
+    
+    作用：
+    FDTDGrid类是gprMax软件中的一个类，它继承自Grid类。它包含与整个网格相关的属性，是访问常用参数的一种方便方式。
+    它存储了与模拟相关的各种信息，如输入文件名、输入目录、输出目录、标题、消息等。
+    它还有一些与主机信息、CPU和GPU相关的属性，如hostinfo、nthreads、tpb和gpu等。
+    此外，它还有一些与模拟相关的属性，如highestfreqthres、maxnumericaldisp和mingridsampling等。
+    这些属性用于控制模拟过程，并提供有关模拟的信息。
+    
     """
 
     def __init__(self):
