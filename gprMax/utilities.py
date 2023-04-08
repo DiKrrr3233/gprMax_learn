@@ -115,7 +115,15 @@ def open_path_file(path_or_file):
 
 def round_value(value, decimalplaces=0):
     """Rounding function.
-
+    round_value 的函数，它接受两个参数：value 和 decimalplaces。
+    value 是一个浮点数，表示要舍入的数字。
+    decimalplaces 是一个整数，表示浮点数的小数位数，用于表示舍入后的值。该函数返回一个整数或浮点数，表示舍入后的值。
+    如果 decimalplaces 等于0，则将 value 舍入到最接近的整数（半个值向下舍入）。否则，将 value 向下舍入到由小数位数表示的最接近的浮点数。
+    
+    (半个值向下舍入):  是指当一个数字的小数部分恰好为0.5时，它将被舍入到最接近的整数，如果这两个整数之间的距离相等，则选择较小的那个整数。
+    例如，2.5将被舍入为2，而-2.5将被舍入为-3。
+    
+    
     Args:
         value (float): Number to round.
         decimalplaces (int): Number of decimal places of float to represent rounded value.
@@ -144,7 +152,14 @@ def round32(value):
 def fft_power(waveform, dt):
     """Calculate a FFT of the given waveform of amplitude values;
         converted to decibels and shifted so that maximum power is 0dB
-
+    fft_power 的函数，它接受两个参数：waveform 和 dt。
+    waveform 是一个 ndarray，表示时间域波形。dt 是一个浮点数，表示时间步长。该函数返回两个 ndarray，分别表示频率区间和功率。
+    
+    该函数首先计算波形的频谱幅度（忽略对任何零值取对数时产生的警告）。
+    然后，用0替换由零除产生的任何 NaN 或 Inf 值。
+    接下来，计算频率区间。
+    最后，将功率移位，使具有最大功率的频率为零分贝。
+    
     Args:
         waveform (ndarray): time domain waveform
         dt (float): time step
