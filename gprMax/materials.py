@@ -55,8 +55,8 @@ class Material(object):
         self.averagable = True
 
         # Default material constitutive parameters (free_space)
-        self.er = 1.0
-        self.se = 0.0
+        self.er = 1.0           #介电常数
+        self.se = 0.0           #电导率
         self.mr = 1.0
         self.sm = 0.0
 
@@ -85,6 +85,8 @@ class Material(object):
     def calculate_update_coeffsE(self, G):
         """Calculates the electric update coefficients of the material.
         该函数用于计算材料的电更新系数。电更新系数是在有限差分时域（FDTD）方法中用于更新电场的系数。它们取决于材料的电性质和模拟中使用的网格参数。
+        
+        最终得到CA、CBx、CBy、CBz用于后续计算。
         Args:
             G (class): Grid class instance - holds essential parameters
                     describing the model.
@@ -217,8 +219,8 @@ def process_materials(G):
         materialtext.append(str(material.numID))
         materialtext.append(material.ID[:50] if len(material.ID) > 50 else material.ID)
         materialtext.append(material.type)
-        materialtext.append('{:g}'.format(material.er))
-        materialtext.append('{:g}'.format(material.se))
+        materialtext.append('{:g}'.format(material.er))                 # er：介电常数
+        materialtext.append('{:g}'.format(material.se))                 # se:  电导率
         if Material.maxpoles > 0:
             if 'debye' in material.type:
                 materialtext.append('\n'.join('{:g}'.format(deltaer) for deltaer in material.deltaer))
